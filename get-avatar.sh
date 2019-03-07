@@ -1,8 +1,10 @@
 #!/usr/bin/env sh
 
 USER_ID=$1
+SERVER_URL=$2
+SERVER_NAME=$3
 
-avatar_url=$(curl -s -X GET https://matrix.agetic.gob.bo/_matrix/client/r0/profile/@${USER_ID}:agetic.gob.bo | jq -r .avatar_url)
+avatar_url=$(curl -s -X GET ${SERVER_URL}/_matrix/client/r0/profile/@${USER_ID}:${SERVER_NAME}/avatar_url | jq -r .avatar_url)
 
 echo "avatar_url is ${avatar_url}"
 
@@ -12,6 +14,7 @@ echo "media_is is ${media_id}"
 
 echo "opening media..."
 
-wget -q https://matrix.agetic.gob.bo/_matrix/media/r0/download/agetic.gob.bo/${media_id} -O /tmp/avatar.png
+wget -q ${SERVER_URL}/_matrix/media/r0/download/${SERVER_NAME}/${media_id} -O /tmp/avatar.png
 
-feh -. /tmp/avatar.png
+# this could be just any image viewer maybe with xdg-open ?
+xdg-open /tmp/avatar.png
